@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="앱 런처" />
+  <meta name="theme-color" content="#0f172a" />
+  <link rel="icon" type="image/png" sizes="192x192" href="./icon-192.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png" />
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <title>오라테크 · 서뉴으뉴 모바일 웹앱 설치 센터 (7종)</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css" />
+  <style>
+    :root {
+      --bg: #0b1120;
+      --surface: #111c33;
+      --card: #16233e;
+      --border: rgba(148, 163, 184, 0.18);
+      --ink: #f8fafc;
+      --ink-2: #cbd5e1;
+      --ink-3: #94a3b8;
+      --accent: #38bdf8;
+    }
+    * { box-sizing: border-box; font-family: 'Pretendard', -apple-system, BlinkMacSystemFont, sans-serif; }
+    html, body { margin: 0; padding: 0; background: var(--bg); color: var(--ink); min-height: 100dvh; overflow-x: hidden; }
+    body { padding: calc(16px + env(safe-area-inset-top, 0px)) 16px calc(32px + env(safe-area-inset-bottom, 0px)); }
+    .wrap { max-width: 960px; margin: 0 auto; }
+
+    .hero {
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 60%, #1d4ed8 140%);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      padding: 22px 20px;
+      margin-bottom: 16px;
+      box-shadow: 0 18px 44px rgba(0, 0, 0, 0.35);
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 11px; font-weight: 800; letter-spacing: 0.06em;
+      background: rgba(56, 189, 248, 0.16); color: #7dd3fc;
+      border: 1px solid rgba(56, 189, 248, 0.3);
+      padding: 4px 10px; border-radius: 999px; margin-bottom: 10px;
+    }
+    .hero h1 { margin: 0 0 6px; font-size: clamp(21px, 5vw, 28px); font-weight: 800; letter-spacing: -0.02em; }
+    .hero p { margin: 0; font-size: 13.5px; color: var(--ink-2); line-height: 1.55; }
+    .hero-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
+
+    .btn-primary {
+      border: none; border-radius: 12px; padding: 10px 15px;
+      background: linear-gradient(135deg, #3b82f6, #6366f1); color: #fff;
+      font-size: 13px; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;
+      text-decoration: none;
+    }
+    .btn-ghost {
+      border: 1px solid var(--border); border-radius: 12px; padding: 10px 14px;
+      background: rgba(255, 255, 255, 0.06); color: var(--ink);
+      font-size: 13px; font-weight: 600; cursor: pointer; display: inline-flex; align-items: center; gap: 6px;
+      text-decoration: none;
+    }
+
+    .notice-kakao {
+      background: rgba(250, 204, 21, 0.1);
+      border: 1px solid rgba(250, 204, 21, 0.35);
+      border-radius: 16px;
+      padding: 13px 15px;
+      margin-bottom: 16px;
+      font-size: 12.5px;
+      line-height: 1.55;
+      color: #fef08a;
+    }
+
+    .os-guide-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 18px;
+    }
+    .guide-card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 14px 15px;
+    }
+    .guide-card.highlight { border-color: rgba(56, 189, 248, 0.6); box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.16); }
+    .guide-card h3 { margin: 0 0 7px; font-size: 14px; font-weight: 700; }
+    .guide-card ol { margin: 0; padding-left: 18px; font-size: 12.5px; color: var(--ink-2); line-height: 1.65; }
+
+    .apps-grid {
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px;
+    }
+    .app-card {
+      background: var(--card); border: 1px solid var(--border); border-radius: 18px; padding: 15px;
+      display: flex; flex-direction: column; gap: 12px;
+      transition: transform 0.14s, border-color 0.14s;
+    }
+    .app-card:hover { transform: translateY(-2px); border-color: rgba(148, 163, 184, 0.42); }
+    .app-top { display: flex; align-items: center; gap: 13px; }
+    .app-icon {
+      width: 60px; height: 60px; border-radius: 15px; flex-shrink: 0;
+      box-shadow: 0 8px 18px rgba(0, 0, 0, 0.35); background: #0f172a; object-fit: cover;
+    }
+    .app-title-row { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+    .app-name { font-size: 16px; font-weight: 800; }
+    .app-tag { font-size: 10.5px; font-weight: 700; padding: 2px 7px; border-radius: 999px; background: rgba(56, 189, 248, 0.15); color: #7dd3fc; }
+    .app-desc { font-size: 12.5px; color: var(--ink-2); line-height: 1.48; margin-top: 4px; }
+    .app-url {
+      font-family: ui-monospace, SFMono-Regular, monospace; font-size: 11px; color: var(--ink-3);
+      background: rgba(0, 0, 0, 0.25); padding: 6px 9px; border-radius: 8px;
+      overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    }
+    .app-btns { display: grid; grid-template-columns: 1fr auto; gap: 8px; }
+    .toast {
+      position: fixed; left: 50%; bottom: calc(20px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%);
+      background: #f8fafc; color: #0f172a; padding: 9px 16px; border-radius: 999px; font-size: 12.5px; font-weight: 700;
+      display: none; z-index: 99; box-shadow: 0 10px 28px rgba(0,0,0,0.4);
+    }
+
+    @media (max-width: 680px) {
+      .os-guide-grid { grid-template-columns: 1fr; }
+      .apps-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <section class="hero">
+      <div class="hero-badge">📱 INSTALLABLE PWA SUITE · ANDROID · IPHONE · PC</div>
+      <h1>오라테크 · 서뉴으뉴 모바일 앱 센터</h1>
+      <p>
+        7개 웹앱 전체가 <b>홈 화면 앱 설치(PWA)</b>로 동작하도록 제작되었습니다.<br>
+        각 앱을 열면 스마트폰 앱처럼 상단 주소창 없는 전체화면 + 전용 아이콘으로 홈 화면에 설치할 수 있습니다.
+      </p>
+      <div class="hero-actions" id="hubActions">
+        <button type="button" id="btnInstallHub" class="btn-primary" style="display:none;" onclick="installHubItself()">📲 이 앱 센터도 홈 화면에 설치</button>
+        <button type="button" class="btn-ghost" onclick="copyAllUrls()">📋 7개 앱 주소 한 번에 복사</button>
+      </div>
+    </section>
+
+    <div class="notice-kakao">
+      💡 <b>카톡/문자 링크로 열었을 때 주의:</b> 카카오톡 내부 브라우저에서는 <i>"홈 화면에 추가"</i> 버튼이 숨겨져 있습니다.<br>
+      우측 하단/상단 <b>[⋮ 또는 ⋯] → [다른 브라우저로 열기 (Chrome / Safari)]</b>를 누른 뒤 설치하세요!
+    </div>
+
+    <section class="os-guide-grid">
+      <div class="guide-card" id="guideAndroid">
+        <h3>🤖 갤럭시 · 안드로이드 (Chrome / 삼성인터넷)</h3>
+        <ol>
+          <li>아래에서 원하는 앱의 <b>[열기 · 설치하기]</b> 버튼 터치</li>
+          <li>화면 우측 상단(또는 하단) <b>[📲 앱 설치]</b> 버튼 클릭<br>(안 보이면 브라우저 메뉴 <b>[⋮ → 앱 설치 / 홈 화면에 추가]</b>)</li>
+          <li>바탕화면에 전용 아이콘 앱 생성 완료!</li>
+        </ol>
+      </div>
+      <div class="guide-card" id="guideIos">
+        <h3>🍎 아이폰 · 아이패드 (반드시 Safari 브라우저)</h3>
+        <ol>
+          <li><b>Safari</b>로 아래 앱 열기 버튼 터치</li>
+          <li>화면 하단 가운데 <b>공유 버튼 [□↑]</b> 터치</li>
+          <li>아래로 내려 <b>[홈 화면에 추가] → [추가]</b> 터치!</li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="apps-grid" id="appsGrid"></section>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <script>
+    const ua = navigator.userAgent || '';
+    const isIos = /iPhone|iPad|iPod/i.test(ua);
+    const isAndroid = /Android/i.test(ua);
+    if (isIos) document.getElementById('guideIos')?.classList.add('highlight');
+    else if (isAndroid) document.getElementById('guideAndroid')?.classList.add('highlight');
+
+    const IS_SERVER = (location.hostname === 'localhost' || location.hostname === '127.0.0.1' || location.hostname.endsWith('.up.railway.app'));
+    const RAILWAY_URL = 'https://naver-store-ai-manager-production.up.railway.app';
+
+    const APPS_LIST = [
+      {
+        key: 'notes',
+        name: '서뉴으뉴 노션',
+        tag: '가족 · 알람 · 일기',
+        desc: '회사·가족 알람, 일기, 서뉴·으뉴 성장기록, 1초 금고, 가계부, 구글드라이브 백업.',
+        ghUrl: 'https://igan3w.github.io/notes/',
+        srvPath: '/notes/'
+      },
+      {
+        key: 'kimdaeri',
+        name: '스토어AI 김대리 v4.0',
+        tag: '스마트스토어 · AI',
+        desc: '스마트스토어 키워드·광고 ROAS 분석, AI 결재함, CS 자동답변, 실시간 지표.',
+        ghUrl: RAILWAY_URL + '/',
+        srvPath: '/'
+      },
+      {
+        key: 'erp',
+        name: '오라테크 ERP Pro',
+        tag: '매출 · 재고 · 계산서',
+        desc: '매입·매출 전표, 재고, 미수금 정산, 거래명세표·견적서 발행 통합 경리시스템.',
+        ghUrl: 'https://igan3w.github.io/erp/',
+        srvPath: '/erp/'
+      },
+      {
+        key: 'studio',
+        name: '상세페이지 AI 스튜디오',
+        tag: '상세제작 · 이미지',
+        desc: '제품 사진 합성, 고전환 스마트스토어 상세페이지 HTML/이미지 1분 제작.',
+        ghUrl: 'https://igan3w.github.io/studio/',
+        srvPath: '/studio/'
+      },
+      {
+        key: 'orawinch',
+        name: '오라테크 공식홈페이지',
+        tag: '132종 제원 · 견적',
+        desc: '전 모델 132종 카탈로그, 실시간 경사·하중 물리 시뮬레이터, 1초 직인견적서.',
+        ghUrl: 'https://igan3w.github.io/orawinch/',
+        srvPath: '/orawinch/'
+      },
+      {
+        key: 'sourcing',
+        name: '1688 소싱랩 · 퀵견적',
+        tag: '소싱 · 마진계산',
+        desc: '1688/타오바오 수입원가·관세·마진 자동 계산 & 30초 B2B 비교견적 포털.',
+        ghUrl: 'https://igan3w.github.io/sourcing/',
+        srvPath: '/sourcing/'
+      },
+      {
+        key: 'strategy',
+        name: '시장 수요 레이더 · 전략 AI',
+        tag: '수요분석 · 코파일럿',
+        desc: '윈치·호이스트 업종별 수요 레이더 & Gemini 4 Carbon 판매전략 코파일럿.',
+        ghUrl: 'https://igan3w.github.io/strategy/',
+        srvPath: '/strategy/'
+      }
+    ];
+
+    function showToast(msg) {
+      const t = document.getElementById('toast');
+      t.textContent = msg;
+      t.style.display = 'block';
+      clearTimeout(t._tid);
+      t._tid = setTimeout(() => { t.style.display = 'none'; }, 2400);
+    }
+
+    function getTargetUrl(app) {
+      return IS_SERVER ? (location.origin + app.srvPath) : app.ghUrl;
+    }
+
+    function getIconUrl(app) {
+      if (IS_SERVER) return `/pwa/${app.key}/icon-192.png`;
+      return `${app.ghUrl}icon-192.png`;
+    }
+
+    document.getElementById('appsGrid').innerHTML = APPS_LIST.map(app => {
+      const url = getTargetUrl(app);
+      const iconUrl = getIconUrl(app);
+      const fallbackIcon = `${RAILWAY_URL}/pwa/${app.key}/icon-192.png`;
+      return `
+        <article class="app-card">
+          <div class="app-top">
+            <img class="app-icon" src="${iconUrl}" alt="${app.name}" onerror="this.onerror=null;this.src='${fallbackIcon}'" />
+            <div style="min-width:0;flex:1;">
+              <div class="app-title-row">
+                <span class="app-name">${app.name}</span>
+                <span class="app-tag">${app.tag}</span>
+              </div>
+              <div class="app-desc">${app.desc}</div>
+            </div>
+          </div>
+          <div class="app-url">${url}</div>
+          <div class="app-btns">
+            <a class="btn-primary" style="justify-content:center;" href="${url}">🚀 앱 열기 · 설치하기</a>
+            <button type="button" class="btn-ghost" onclick="copyText('${url}', '${app.name}')">복사</button>
+          </div>
+        </article>`;
+    }).join('');
+
+    function copyText(txt, label) {
+      navigator.clipboard?.writeText(txt).then(() => showToast(`📋 ${label} 주소 복사됨!`)).catch(() => prompt('아래 주소를 복사하세요', txt));
+    }
+
+    function copyAllUrls() {
+      const lines = APPS_LIST.map(a => `- ${a.name}: ${getTargetUrl(a)}`).join('\n');
+      copyText(lines, '전체 7개 앱 주소');
+    }
+
+    let deferredHubPrompt = null;
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredHubPrompt = e;
+      document.getElementById('btnInstallHub').style.display = 'inline-flex';
+    });
+    window.installHubItself = async () => {
+      if (!deferredHubPrompt) return;
+      deferredHubPrompt.prompt();
+      await deferredHubPrompt.userChoice;
+      deferredHubPrompt = null;
+      document.getElementById('btnInstallHub').style.display = 'none';
+    };
+
+    if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1')) {
+      navigator.serviceWorker.register('./sw.js', { scope: './' }).catch(() => {});
+    }
+  </script>
+</body>
+</html>
